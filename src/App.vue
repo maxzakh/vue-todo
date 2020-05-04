@@ -1,29 +1,37 @@
 <template>
-  <div class="container">
-    <input v-model="currentTodo" @keydown.enter="addTodo()" placeholder="Add a todo" />
-    <ul class="todos">
-      <li
-        v-for="todo in todos"
-        :key="todo.id"
-        :class="{ todo: true, editing: editedTodo === todo, completed: todo.completed}"
-        @dblclick="editTodo(todo)"
-      >
-        <div class="view">
-          <input class="check" type="checkbox" v-model="todo.completed" />
-          <div class="title">{{ todo.label }}</div>
-          <button @click="removeTodo(todo)">&times;</button>
-        </div>
-        <input
-          class="edit"
-          v-model="todo.label"
-          v-todo-html-focus="todo == editedTodo"
-          @blur="cancelEdit(todo)"
-          @keyup.esc="cancelEdit(todo)"
-          @keyup.enter="doneEdit(todo)"
-        />
-      </li>
-    </ul>
-  </div>
+  <section class="container">
+    <header>
+      <h1 class="title">todos</h1>
+      <input v-model="currentTodo" @keydown.enter="addTodo()" placeholder="What needs to be done?" />
+    </header>
+    <section>
+      <ul class="todos">
+        <li
+          v-for="todo in todos"
+          :key="todo.id"
+          :class="{ todo: true, editing: editedTodo === todo, completed: todo.completed}"
+          @dblclick="editTodo(todo)"
+        >
+          <div class="view">
+            <input class="check" type="checkbox" v-model="todo.completed" />
+            <div class="title">{{ todo.label }}</div>
+            <button @click="removeTodo(todo)">&times;</button>
+          </div>
+          <input
+            class="edit"
+            v-model="todo.label"
+            v-todo-html-focus="todo == editedTodo"
+            @blur="cancelEdit(todo)"
+            @keyup.esc="cancelEdit(todo)"
+            @keyup.enter="doneEdit(todo)"
+          />
+        </li>
+      </ul>
+    </section>
+    <footer>
+      text
+    </footer>
+  </section>
 </template>
 
 <script>
@@ -99,7 +107,7 @@ export default Vue.extend({
 body {
   margin: 0;
   padding: 0;
-  min-height: 100vh;
+  // min-height: 100vh;
   display: flex;
   justify-content: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -108,12 +116,33 @@ body {
 .container {
   display: flex;
   flex-flow: column;
-  margin-top: 5em;
   min-width: 70vw;
-  // background-color: lightblue;
-
+  margin-top: 80px;
+  background-color: lightblue;
+  // border: 1px solid red;
+  box-shadow: 
+    0 2px 4px 0 rgba(0, 0, 0, 0.2),
+    0 25px 50px 0 rgba(0, 0, 0, 0.1);
+  
   input {
     padding: 0.4em;
+  }
+
+  header {
+    h1 {
+      position: absolute;
+      top: 0;
+      width: 70vw;
+      font-size: 2em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    input {
+      width: 100%;
+      font-size: 1.2em;
+      border: none;
+    }
   }
 
   .todos {
