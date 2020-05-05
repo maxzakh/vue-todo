@@ -1,12 +1,16 @@
 {
+  "homepage": "https://maxzakh.github.io/vue-todo",
   "name": "todo",
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predeploy": "ng build --prod --base-href https://maxzakh.github.io/vue-todo/",
+    "deploy": "gh-pages -b master -d build",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
   "dependencies": {
+    "gh-pages": "^2.2.0",
     "vue": "^2.6.11"
   },
   "devDependencies": {

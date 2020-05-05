@@ -29,7 +29,13 @@
       </ul>
     </section>
     <footer>
-      text
+      <div class="items-left">{{completed}} items left</div>
+      <div class="static">
+        <div class="items-all current-filter">All</div>
+        <div class="items-active">Active</div>
+        <div class="items-completed">Completed</div>
+      </div>
+      <div class="items-clear-completed" v-if="completed !== todos.length" @click="removeCompleted">Clear completed</div>
     </footer>
   </section>
 </template>
@@ -64,6 +70,9 @@ export default Vue.extend({
       var index = this.todos.indexOf(todo);
       this.todos.splice(index, 1);
     },
+    removeCompleted() {
+      this.todos = this.todos.filter(todo => !todo.completed);
+    },
     editTodo(todo) {
       console.log("editTodo");
       // todo.completed = !todo.completed;
@@ -86,6 +95,17 @@ export default Vue.extend({
       todo.label = this.originalEditedTodoValue;
     }
   },
+  computed: {
+    completed() {
+      let remaining = 0;
+      this.todos.forEach(todo => {
+        if (!todo.completed) {
+          remaining++;
+        }
+      });
+      return remaining;
+    }
+  },
   // a custom directive to wait for the DOM to be updated
   // before focusing on the input field.
   // http://vuejs.org/guide/custom-directive.html
@@ -100,32 +120,33 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-* {
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  padding: 0;
   // min-height: 100vh;
   display: flex;
   justify-content: center;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+$spacer: 0.4em;
+
 .container {
   display: flex;
   flex-flow: column;
   min-width: 70vw;
   margin-top: 80px;
-  background-color: lightblue;
   // border: 1px solid red;
-  box-shadow: 
-    0 2px 4px 0 rgba(0, 0, 0, 0.2),
-    0 25px 50px 0 rgba(0, 0, 0, 0.1);
-  
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1);
+
   input {
-    padding: 0.4em;
+    padding: 0.6em;
   }
 
   header {
@@ -140,14 +161,14 @@ body {
 
     input {
       width: 100%;
-      font-size: 1.2em;
+      font-size: 1.3em;
       border: none;
     }
   }
 
   .todos {
     padding: 0;
-    background-color: #f7f7f7;
+    background-color: #fafafa;
 
     li {
       list-style-type: none;
@@ -169,7 +190,11 @@ body {
         }
 
         button {
+          outline: none;
+          border: 1px solid rgb(167, 167, 167);
           border-radius: 50%;
+          padding: 1px 6px;
+          color: rgb(122, 122, 122);
         }
       }
 
@@ -192,6 +217,60 @@ body {
     li.completed .title {
       text-decoration: line-through;
     }
+  }
+
+  footer {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 $spacer;
+    height: 3em;
+    background-color: #fafafa;
+    color: rgb(90, 90, 90);
+    // font-size: .9em;
+
+    // & > * {
+    //   border: 1px solid red;
+    // }
+
+    > :first-child {
+      flex-basis: 6em;
+    }
+
+    .static {
+      flex: 1 1;
+
+      display: flex;
+      justify-content: center;
+
+      div {
+        padding: 0.1em $spacer;
+        cursor: pointer;
+      }
+
+      .current-filter {
+        border: 1px dashed rgb(109, 109, 109);
+        border-radius: 3px;
+      }
+    }
+
+    .items-clear-completed {
+      cursor: pointer;
+    }
+  }
+
+  footer::before {
+    content: "";
+    position: absolute;
+    height: 100px;
+    left: 0;
+    right: 0;
+    z-index: -1;
+    // top: 0;
+    bottom: 0;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2), 0 8px 0 -3px #f6f6f6,
+      0 9px 1px -3px rgba(0, 0, 0, 0.2), 0 16px 0 -6px #f6f6f6,
+      0 17px 2px -6px rgba(0, 0, 0, 0.2);
   }
 }
 </style>
