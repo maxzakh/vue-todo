@@ -7,7 +7,7 @@
     <section>
       <ul class="todos">
         <li
-          v-for="todo in todos"
+          v-for="todo in filteredTodos"
           :key="todo.id"
           :class="{ todo: true, editing: editedTodo === todo, completed: todo.completed}"
           @dblclick="editTodo(todo)"
@@ -31,9 +31,9 @@
     <footer>
       <div class="items-left">{{completed}} items left</div>
       <div class="static">
-        <div class="items-all current-filter">All</div>
-        <div class="items-active">Active</div>
-        <div class="items-completed">Completed</div>
+        <div @click="visibility = 'all'" :class="{'items-all': true, selected: visibility === 'all'}">All</div>
+        <div @click="visibility = 'active'" :class="{'items-active': true, selected: visibility === 'active'}">Active</div>
+        <div @click="visibility = 'completed'" :class="{'items-completed': true, selected: visibility === 'completed'}">Completed</div>
       </div>
       <div class="items-clear-completed" v-if="completed !== todos.length" @click="removeCompleted">Clear completed</div>
     </footer>
@@ -43,6 +43,18 @@
 <script>
 ////@ts-check
 import Vue from "vue";
+
+let filters = {
+  all: function(todos) {
+    return todos;
+  },
+  active: function(todos) {
+    return todos.filter(todo => !todo.completed);
+  },
+  completed: function(todos) {
+    return todos.filter(todo => todo.completed);
+  }
+};
 
 export default Vue.extend({
   data() {
@@ -54,7 +66,8 @@ export default Vue.extend({
       ],
       currentTodo: "",
       editedTodo: null,
-      originalEditedTodoValue: ""
+      originalEditedTodoValue: "",
+      visibility: 'all'
     };
   },
   methods: {
@@ -104,6 +117,9 @@ export default Vue.extend({
         }
       });
       return remaining;
+    },
+    filteredTodos() {
+      return filters[this.visibility](this.todos); 
     }
   },
   // a custom directive to wait for the DOM to be updated
@@ -248,7 +264,7 @@ $spacer: 0.4em;
         cursor: pointer;
       }
 
-      .current-filter {
+      .selected {
         border: 1px dashed rgb(109, 109, 109);
         border-radius: 3px;
       }
