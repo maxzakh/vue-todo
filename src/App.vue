@@ -1,5 +1,5 @@
 <template>
-  <section class="container">
+  <section class="container debug-grid-16-solid">
     <header>
       <h1 class="title">todos</h1>
       <input v-model="currentTodo" @keydown.enter="addTodo()" placeholder="What needs to be done?" />
@@ -142,6 +142,14 @@ export default Vue.extend({
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.debug * {
+  outline: 1px solid gold;
+}
+
+.debug-grid-16-solid {
+  background:red url(data:image/gif;base64,R0lGODdhEAAQAPEAAADw/wDx/xXy/////ywAAAAAEAAQAAACIZyPKckYDQFsb6ZqD85jZ2+BkwiRFKehhqQCQgDHcgwEBQA7) repeat top left;
 }
 
 body {
